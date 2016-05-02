@@ -1,0 +1,22 @@
+Results
+=======
+
+Model settings
+--------------
+
+The single hidden layer neural network was tested under the following settings:
+
+- The chosen gradient descent method is the mini-batch gradient descent, where the batch size is 1,000, so that there are 50 batches per iteration.
+- The learning rate follows a harmonic sequence of the form :math:`\left(\frac{\alpha}{1 + k/\gamma}\right)_{k\in\mathbb{R}}`, such the gradient descent is guaranteed to converge, with :math:`\alpha=0.0001` and :math:`\gamma=1000`.
+- The number of iterations was chosen to be 300 for the first three cases and 1500 for the last.
+- A range of neurons (:math:`M`) was tested, namely :math:`M=10,50,150`. The table shows that if we were to choose the number of neurons for the model with best accuracy in the validation set, we would have chosen :math:`M=150`, which is also performs the best in the test set. These values 10,50,150 were chosen according to the typical range 5 to 100. The value 10 is motivated by the fact that there are 10 different characters to classify, and if M<10, the nullity of :math:`\beta` would necessarily be non-zero. The value 150 was chosen in the spirit of the general rule that the higher the number of neurons, the better, provided that there is a mechanism to avoid overfitting.
+- No regularization method was used. In this case, we see that the number of iterations was not large enough to produce significand overfitting.
+
+Table of results
+----------------
+
+The results are summarised in the following table, which was generated automatically by the :doc:`exercise`:
+
+.. csv-table::
+   :file: ../../results.csv
+   :header-rows: 1

@@ -1,0 +1,77 @@
+Theory
+======
+
+Model
+-----
+
+The model considered is a single hidden layer neural network. This means that, given the random variables :math:`X` and :math:`Y=f(X)`, we want to create a function :math:`\hat{f}` such that :math:`Y\approx\hat{f}(X)`, which is given by
+
+.. math::
+   f(X) &= g(\beta_0 + \beta Z),\\
+   Z &= \sigma(\alpha_0 + \alpha X),
+
+where :math:`Z` represents the hidden layer, :math:`g` is called the output function, :math:`\sigma` is called the the activation function, and the maps :math:`z \mapsto \beta z + \beta_0` and :math:`x \mapsto \alpha x + \alpha_0` are affine operators.
+
+In the end, we apply the neural network to the MNIST data set, which means that it will used for classification.
+
+Gradients
+---------
+
+Since the model is intended for classification, an appropriate loss function is the cross-entropy
+
+.. math::
+   R(\theta)   &:= -\sum_{i=1}^N R_i, \\
+   R_i(\theta) &:= Y^\top_i \log\left(f(X_i)\right).
+
+Where :math:`\theta = (\alpha_0, \alpha_1, \dots, \alpha_p, \beta_0, \beta_1, \dots, \beta_M)` and :math:`f:\mathbb{R}^p\to\mathbb{R}^K` is the neural network function (we now drop the hat in :math:`\hat{f}` to ease the notation).
+
+Define
+
+.. math::
+   \delta_{ki} &:= \left(\frac{Y_i}{f(X_i)}\right)^\top \nabla g_k(\beta_0 + \beta Z_i), \\
+        s_{mi} &:= \sum_{k=1}^K \delta_{ki} \beta_{km} \left(\sigma'(\alpha_0 + \alpha X_i)\right)_m, \\
+               & = \sum_{k=1}^K \delta_{ki} \beta_{km} \sigma'(\alpha_{m0} + \alpha_m^\top X_i), \\
+               & = \left(\sigma'(\alpha_0 + \alpha X)\right)_{mi}(\beta^\top\delta)_{mi},
+
+where the division :math:`Y_i/f(X_i)` is pointwise.
+
+Using chain rule and matrix calculus, we obtain
+
+.. math::
+   \frac{dR_i(\theta)}{d\theta}                   &= \left(\frac{Y_i}{f(X_i)}\right)^\top \frac{\partial f(X_i)}{\partial \theta} \\
+   \frac{\partial R_i(X_i)}{\partial \beta_{k0}}  &= \left(\frac{Y_i}{f(X_i)}\right)^\top\nabla g_k(\beta_0 + \beta Z_i), \\
+                                                  &= \delta_{ki}, \\
+   \frac{\partial R_i(X_i)}{\partial \beta_{km}}  &= \left(\frac{Y_i}{f(X_i)}\right)^\top\nabla g_k(\beta_0 + \beta Z_i)Z_{im}, \\
+                                                  &= \delta_{ki}Z_{im}, \\
+   \frac{\partial R_i(X_i)}{\partial \alpha_{m0}} &= \sum_{k=1}^K \left(\frac{Y_i}{f(X_i)}\right)^\top\nabla g_k(\beta_0 + \beta Z_i) \beta_{km} \sigma'(\alpha_0 + \alpha X_i), \\
+                                                  &= \sum_{k=1}^K \delta_{ki} \beta_{km} \left(\sigma'(\alpha_0 + \alpha X_i)\right)_m,  \\
+                                                  &= s_{mi},  \\
+   \frac{\partial R_i(X_i)}{\partial \alpha_{mj}} &= \sum_{k=1}^K \left(\frac{Y_i}{f(X_i)}\right)^\top\nabla g_k(\beta_0 + \beta Z_i) \beta_{km} \left(\sigma'(\alpha_0 + \alpha X_i)\right)_m X_{ij}, \\
+                                                  &= s_{mi}X_{ij},  \\
+
+Therefore,
+
+.. math::
+   \frac{\partial R(\theta)}{\partial \beta_0} = \sum_{i=1}^N \delta_i, \quad
+   \frac{\partial R(\theta)}{\partial \beta}   = \delta Z, \quad
+   \frac{\partial R(\theta)}{\partial \alpha_0} = \sum_{i=1}^N s_i, \quad
+   \frac{\partial R(\theta)}{\partial \alpha} = s X. \\
+
+Note that we can further simplify the matrix :math:`\delta`:
+
+.. math::
+   \delta_{ki} &= \sum_{\ell=1}^K \frac{Y_{i\ell}}{f_\ell(X_i)}\frac{dg_k(T_i)}{dt_\ell} \\
+               &= \sum_{\ell=1}^K \frac{Y_{i\ell}}{f_\ell(X_i)}\left(-g_k (T_i) g_\ell (T_i)+g_k (T_i) \mathbb{I}_{k=\ell}\right) \\
+               &= \sum_{\ell=1}^K \frac{Y_{i\ell}}{f_\ell(X_i)}\left(-f_k(X_i) f_\ell(X_i)+f_\ell(X_i) \mathbb{I}_{k=\ell}\right) \\
+               &= Y_{ik} - f_k(X_i) \sum_{\ell=1}^K Y_{i\ell} \\
+               &= Y_{ik} - f_k(X_i),
+
+where in the last line we used the fact that :math:`Y_{ik} = 1` for some :math:`k\in\{1,\dots,K\}` and :math:`Y_{i\ell} = 0` for :math:`\ell\neq k`, which implies
+
+.. math::
+   \sum_{\ell=1}^K Y_{i\ell} = 1
+
+Hence, we get
+
+.. math::
+   \delta = \left(Y - f(X)\right)^\top, \quad s = \sigma'(\alpha_0 + \alpha X)\delta\beta.

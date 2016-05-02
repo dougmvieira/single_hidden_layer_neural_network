@@ -1,0 +1,7 @@
+gradient_descent module
+=======================
+
+.. automodule:: gradient_descent
+    :members:
+    :undoc-members:
+    :show-inheritance:

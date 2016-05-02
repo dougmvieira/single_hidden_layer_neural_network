@@ -1,0 +1,288 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>gradient_descent module &mdash; single_hidden_layer_neural_network 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="single_hidden_layer_neural_network 1.0 documentation" href="index.html"/>
+        <link rel="up" title="Code" href="code.html"/>
+        <link rel="next" title="mnist_tools module" href="mnist_tools.html"/>
+        <link rel="prev" title="activation_and_output_functions module" href="activation_and_output_functions.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> single_hidden_layer_neural_network
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="theory.html">Theory</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="code.html">Code</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="code.html#modules">Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="neural_network.html">neural_network module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exercise.html">exercise module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="activation_and_output_functions.html">activation_and_output_functions module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="">gradient_descent module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mnist_tools.html">mnist_tools module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#code-structure">Code structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="results.html">Results</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">single_hidden_layer_neural_network</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="code.html">Code</a> &raquo;</li>
+      
+    <li>gradient_descent module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/gradient_descent.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-gradient_descent">
+<span id="gradient-descent-module"></span><h1>gradient_descent module<a class="headerlink" href="#module-gradient_descent" title="Permalink to this headline">¶</a></h1>
+<p>Gradient descent and mini-batch gradient descent methods.</p>
+<dl class="function">
+<dt id="gradient_descent.gradient_descent">
+<code class="descclassname">gradient_descent.</code><code class="descname">gradient_descent</code><span class="sig-paren">(</span><em>x0</em>, <em>gradient_function</em>, <em>alpha=0.0001</em>, <em>max_iterations=1000</em>, <em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gradient_descent.html#gradient_descent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gradient_descent.gradient_descent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to find x such that f(x) = 0 using the gradient descent
+method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x0</strong> (<em>array-like</em>) &#8211; Initial guess for x.</li>
+<li><strong>(function</strong> (<em>gradient_function</em>) &#8211; array-like to array-like): Function that
+computes the gradient of the objective function.</li>
+<li><strong>alpha</strong> (<em>Optional[float]</em>) &#8211; scales the gradient descent step size.</li>
+<li><strong>max_iterations</strong> (<em>Optional[int]</em>) &#8211; Sets a limit for the number of
+iterations of the gradient descent algorithm.</li>
+<li><strong>(Optional[function</strong> (<em>stop_function</em>) &#8211; array-like to bool]): User-defined
+function to interrupt the algorithm. The function is fed with the
+current value of x and if it returns <cite>True</cite>, the algorithm stops.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">returns the approximated value of x such that f(x) = 0
+given the algorithm interruption conditions.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array-like</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gradient_descent.mini_batch_gradient_descent">
+<code class="descclassname">gradient_descent.</code><code class="descname">mini_batch_gradient_descent</code><span class="sig-paren">(</span><em>x0</em>, <em>m</em>, <em>sampled_gradient_function</em>, <em>m0=1000</em>, <em>max_iterations=300</em>, <em>alpha=0.001</em>, <em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gradient_descent.html#mini_batch_gradient_descent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gradient_descent.mini_batch_gradient_descent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to find x such that f(x) = 0 using the mini-batch gradient
+descent method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x0</strong> (<em>array-like</em>) &#8211; Initial guess for x.</li>
+<li><strong>(function</strong> (<em>gradient_function</em>) &#8211; array-like to array-like): Function that
+computes the gradient of the objective function.</li>
+<li><strong>m0</strong> (<em>Optional[int]</em>) &#8211; mini-batch size</li>
+<li><strong>alpha</strong> (<em>Optional[float]</em>) &#8211; scales the mini-batch gradient descent step
+size.</li>
+<li><strong>max_iterations</strong> (<em>Optional[int]</em>) &#8211; Sets a limit for the number of
+iterations of the mini-batch gradient descent algorithm.</li>
+<li><strong>(Optional[function</strong> (<em>stop_function</em>) &#8211; array-like to bool]): User-defined
+function to interrupt the algorithm. The function is fed with the
+current value of x and if it returns <cite>True</cite>, the algorithm stops.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">returns the approximated value of x such that f(x) = 0
+given the algorithm interruption conditions.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array-like</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="mnist_tools.html" class="btn btn-neutral float-right" title="mnist_tools module" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="activation_and_output_functions.html" class="btn btn-neutral" title="activation_and_output_functions module" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Douglas Machado Vieira.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

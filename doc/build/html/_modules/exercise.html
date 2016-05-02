@@ -1,0 +1,399 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>exercise &mdash; single_hidden_layer_neural_network 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="single_hidden_layer_neural_network 1.0 documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> single_hidden_layer_neural_network
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory.html">Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code.html">Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../results.html">Results</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">single_hidden_layer_neural_network</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      
+    <li>exercise</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for exercise</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This exercise demonstrates the neural network model for the MNIST data set.</span>
+
+<span class="sd">Four model settings are calibrated. Then, the time elapsed and accuracy of</span>
+<span class="sd">these setting are computed.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">datetime</span> <span class="kn">as</span> <span class="nn">dt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">cPickle</span> <span class="kn">as</span> <span class="nn">pk</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">isfile</span>
+<span class="kn">from</span> <span class="nn">timeit</span> <span class="kn">import</span> <span class="n">default_timer</span> <span class="k">as</span> <span class="n">timer</span>
+<span class="kn">from</span> <span class="nn">mnist_tools</span> <span class="kn">import</span> <span class="n">download_mnist_file</span><span class="p">,</span> <span class="n">load_mnist</span>
+<span class="kn">from</span> <span class="nn">neural_network</span> <span class="kn">import</span> <span class="p">(</span><span class="n">argmax_classifier</span><span class="p">,</span> <span class="n">neural_network</span><span class="p">,</span> <span class="n">theta_map</span><span class="p">,</span>
+                            <span class="n">softmax</span><span class="p">,</span> <span class="n">sigmoid</span><span class="p">,</span> <span class="n">derivative_of_sigmoid</span><span class="p">,</span>
+                            <span class="n">calibrate_neural_network</span><span class="p">)</span>
+
+<div class="viewcode-block" id="initialise_data"><a class="viewcode-back" href="../exercise.html#exercise.initialise_data">[docs]</a><span class="k">def</span> <span class="nf">initialise_data</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Downloads MNIST data set, if needed, and returns a four-element tuple</span>
+<span class="sd">    which contains its training set for y and x, respectively, and the</span>
+<span class="sd">    dimensions of y and x, respectively.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">print</span> <span class="s2">&quot;Downloading data&quot;</span>
+    <span class="n">download_mnist_file</span><span class="p">()</span>
+    
+    <span class="k">print</span> <span class="s2">&quot;Loading data&quot;</span>
+    <span class="n">train_set</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_mnist</span><span class="p">()</span>
+
+    <span class="n">y</span> <span class="o">=</span> <span class="n">train_set</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">train_set</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">K</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">p</span></div>
+
+<div class="viewcode-block" id="calibrate_model_1"><a class="viewcode-back" href="../exercise.html#exercise.calibrate_model_1">[docs]</a><span class="k">def</span> <span class="nf">calibrate_model_1</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Calibrate a neural network model where the activation function is the</span>
+<span class="sd">    sigmoid function, the output function is the softmax function, the hidden</span>
+<span class="sd">    layer has 10 neurons and its trained for 300 iterations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">initialise_data</span><span class="p">()</span>
+
+    <span class="n">sigma</span> <span class="o">=</span> <span class="n">sigmoid</span>
+    <span class="n">sigma_prime</span> <span class="o">=</span> <span class="n">derivative_of_sigmoid</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="mi">10</span>
+
+    <span class="k">print</span> <span class="s2">&quot;Calibrating model 1 (M = 10)&quot;</span>
+
+    <span class="n">start_t</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">calibrate_neural_network</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">sigma_prime</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span>
+                                     <span class="s2">&quot;Mini-batch Gradient Descent&quot;</span><span class="p">)</span>
+    <span class="n">end_t</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;theta10.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">pk</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;time10.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">pk</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">end_t</span> <span class="o">-</span> <span class="n">start_t</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="calibrate_model_2"><a class="viewcode-back" href="../exercise.html#exercise.calibrate_model_2">[docs]</a><span class="k">def</span> <span class="nf">calibrate_model_2</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Calibrate a neural network model where the activation function is the</span>
+<span class="sd">    sigmoid function, the output function is the softmax function, the hidden</span>
+<span class="sd">    layer has 50 neurons and its trained for 300 iterations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">initialise_data</span><span class="p">()</span>
+
+    <span class="n">sigma</span> <span class="o">=</span> <span class="n">sigmoid</span>
+    <span class="n">sigma_prime</span> <span class="o">=</span> <span class="n">derivative_of_sigmoid</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="mi">50</span>
+
+    <span class="k">print</span> <span class="s2">&quot;Calibrating model 2 (M = 50)&quot;</span>
+
+    <span class="n">start_t</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">calibrate_neural_network</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">sigma_prime</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span>
+                                     <span class="s2">&quot;Mini-batch Gradient Descent&quot;</span><span class="p">)</span>
+    <span class="n">end_t</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;theta50.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">pk</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;time50.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">pk</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">end_t</span> <span class="o">-</span> <span class="n">start_t</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="calibrate_model_3"><a class="viewcode-back" href="../exercise.html#exercise.calibrate_model_3">[docs]</a><span class="k">def</span> <span class="nf">calibrate_model_3</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Calibrate a neural network model where the activation function is the</span>
+<span class="sd">    sigmoid function, the output function is the softmax function, the hidden</span>
+<span class="sd">    layer has 150 neurons and its trained for 300 iterations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">initialise_data</span><span class="p">()</span>
+
+    <span class="n">sigma</span> <span class="o">=</span> <span class="n">sigmoid</span>
+    <span class="n">sigma_prime</span> <span class="o">=</span> <span class="n">derivative_of_sigmoid</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="mi">150</span>
+
+    <span class="k">print</span> <span class="s2">&quot;Calibrating model 3 (M = 150)&quot;</span>
+
+    <span class="n">start_t</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">calibrate_neural_network</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">sigma_prime</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span>
+                                     <span class="s2">&quot;Mini-batch Gradient Descent&quot;</span><span class="p">)</span>
+    <span class="n">end_t</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;theta150.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">pk</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;time150.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">pk</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">end_t</span> <span class="o">-</span> <span class="n">start_t</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="calibrate_model_4"><a class="viewcode-back" href="../exercise.html#exercise.calibrate_model_4">[docs]</a><span class="k">def</span> <span class="nf">calibrate_model_4</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Calibrate a neural network model where the activation function is the</span>
+<span class="sd">    sigmoid function, the output function is the softmax function, the hidden</span>
+<span class="sd">    layer has 10 neurons and its trained for 1500 iterations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">initialise_data</span><span class="p">()</span>
+
+    <span class="n">sigma</span> <span class="o">=</span> <span class="n">sigmoid</span>
+    <span class="n">sigma_prime</span> <span class="o">=</span> <span class="n">derivative_of_sigmoid</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="mi">10</span>
+
+    <span class="k">print</span> <span class="s2">&quot;Calibrating model 4 (M = 10, 1500 iters)&quot;</span>
+
+    <span class="n">start_t</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">calibrate_neural_network</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">sigma_prime</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span>
+                                     <span class="s2">&quot;Mini-batch Gradient Descent&quot;</span><span class="p">,</span>
+                                     <span class="n">max_iterations</span><span class="o">=</span><span class="mi">1500</span><span class="p">)</span>
+    <span class="n">end_t</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;theta10_2.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">pk</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;time10_2.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">pk</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">end_t</span> <span class="o">-</span> <span class="n">start_t</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="exercise"><a class="viewcode-back" href="../exercise.html#exercise.exercise">[docs]</a><span class="k">def</span> <span class="nf">exercise</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Calibrate the four models above, if that has not yet been done, and</span>
+<span class="sd">    print the time elapsed to train the models with their accuracy rates for</span>
+<span class="sd">    the training, validation and test sets.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">isfile</span><span class="p">(</span><span class="s1">&#39;theta10.pickle&#39;</span><span class="p">):</span>
+        <span class="n">calibrate_model_1</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">isfile</span><span class="p">(</span><span class="s1">&#39;theta50.pickle&#39;</span><span class="p">):</span>
+        <span class="n">calibrate_model_2</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">isfile</span><span class="p">(</span><span class="s1">&#39;theta150.pickle&#39;</span><span class="p">):</span>
+        <span class="n">calibrate_model_3</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">isfile</span><span class="p">(</span><span class="s1">&#39;theta10_2.pickle&#39;</span><span class="p">):</span>
+        <span class="n">calibrate_model_4</span><span class="p">()</span>
+
+    <span class="k">print</span> <span class="s2">&quot;Loading data&quot;</span>
+
+    <span class="n">train_set</span><span class="p">,</span> <span class="n">valid_set</span><span class="p">,</span> <span class="n">test_set</span> <span class="o">=</span> <span class="n">load_mnist</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">train_set</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">train_set</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">y_valid</span> <span class="o">=</span> <span class="n">valid_set</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">x_valid</span> <span class="o">=</span> <span class="n">valid_set</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">y_test</span> <span class="o">=</span> <span class="n">test_set</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">x_test</span> <span class="o">=</span> <span class="n">test_set</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">K</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">print</span> <span class="s2">&quot;Computing the results&quot;</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;theta10.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">theta_10</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;time10.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">time_elapsed_10</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;theta50.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">theta_50</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;time50.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">time_elapsed_50</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;theta150.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">theta_150</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;time150.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">time_elapsed_150</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;theta10_2.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">theta_10_2</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;time10_2.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">time_elapsed_10_2</span> <span class="o">=</span> <span class="n">pk</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="n">models</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;M = 10&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">theta_10</span><span class="p">,</span> <span class="n">time_elapsed_10</span><span class="p">),</span>
+              <span class="p">(</span><span class="s1">&#39;M = 50&#39;</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">theta_50</span><span class="p">,</span> <span class="n">time_elapsed_50</span><span class="p">),</span>
+              <span class="p">(</span><span class="s1">&#39;M = 150&#39;</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="n">theta_150</span><span class="p">,</span> <span class="n">time_elapsed_150</span><span class="p">),</span>
+              <span class="p">(</span><span class="s1">&#39;M = 10 (1500 iters)&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">theta_10_2</span><span class="p">,</span> <span class="n">time_elapsed_10_2</span><span class="p">)]</span>
+    
+    <span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">([</span><span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Number of neurons&#39;</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">dt</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">model</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">],</span>
+                           <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Time elapsed&#39;</span><span class="p">])</span>
+
+    <span class="n">sigma</span> <span class="o">=</span> <span class="n">sigmoid</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">softmax</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="bp">None</span><span class="p">))</span>
+    <span class="n">accuracy</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">y</span><span class="p">,</span> <span class="n">predictor</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="o">==</span><span class="n">predictor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">theta</span><span class="p">))</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)))</span>
+    <span class="n">predictor</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">argmax_classifier</span><span class="p">(</span><span class="n">neural_network</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span>
+                                         <span class="o">*</span><span class="n">theta_map</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">K</span><span class="p">))[</span><span class="mi">0</span><span class="p">]))</span>
+
+    <span class="n">results</span><span class="p">[</span><span class="s2">&quot;Accuracy (training)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">accuracy</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">predictor</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">model</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">model</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">]</span>
+    <span class="n">results</span><span class="p">[</span><span class="s2">&quot;Accuracy (validation)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">accuracy</span><span class="p">(</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">predictor</span><span class="p">,</span> <span class="n">x_valid</span><span class="p">,</span> <span class="n">model</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">model</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">]</span>
+    <span class="n">results</span><span class="p">[</span><span class="s2">&quot;Accuracy (test)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">accuracy</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predictor</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">model</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">model</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">]</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">results</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;results.csv&#39;</span><span class="p">)</span>
+
+    <span class="k">print</span> <span class="n">results</span></div>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">exercise</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Douglas Machado Vieira.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

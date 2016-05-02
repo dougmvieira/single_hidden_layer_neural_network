@@ -1,0 +1,7 @@
+activation_and_output_functions module
+======================================
+
+.. automodule:: activation_and_output_functions
+    :members:
+    :undoc-members:
+    :show-inheritance:

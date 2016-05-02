@@ -1,0 +1,264 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Results &mdash; single_hidden_layer_neural_network 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="single_hidden_layer_neural_network 1.0 documentation" href="index.html"/>
+        <link rel="prev" title="mnist_tools module" href="mnist_tools.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> single_hidden_layer_neural_network
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="theory.html">Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">Code</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Results</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#model-settings">Model settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#table-of-results">Table of results</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">single_hidden_layer_neural_network</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Results</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/results.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="results">
+<h1>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="model-settings">
+<h2>Model settings<a class="headerlink" href="#model-settings" title="Permalink to this headline">¶</a></h2>
+<p>The single hidden layer neural network was tested under the following settings:</p>
+<ul class="simple">
+<li>The chosen gradient descent method is the mini-batch gradient descent, where the batch size is 1,000, so that there are 50 batches per iteration.</li>
+<li>The learning rate follows a harmonic sequence of the form <span class="math">\(\left(\frac{\alpha}{1 + k/\gamma}\right)_{k\in\mathbb{R}}\)</span>, such the gradient descent is guaranteed to converge, with <span class="math">\(\alpha=0.0001\)</span> and <span class="math">\(\gamma=1000\)</span>.</li>
+<li>The number of iterations was chosen to be 300 for the first three cases and 1500 for the last.</li>
+<li>A range of neurons (<span class="math">\(M\)</span>) was tested, namely <span class="math">\(M=10,50,150\)</span>. The table shows that if we were to choose the number of neurons for the model with best accuracy in the validation set, we would have chosen <span class="math">\(M=150\)</span>, which is also performs the best in the test set. These values 10,50,150 were chosen according to the typical range 5 to 100. The value 10 is motivated by the fact that there are 10 different characters to classify, and if M&lt;10, the nullity of <span class="math">\(\beta\)</span> would necessarily be non-zero. The value 150 was chosen in the spirit of the general rule that the higher the number of neurons, the better, provided that there is a mechanism to avoid overfitting.</li>
+<li>No regularization method was used. In this case, we see that the number of iterations was not large enough to produce significand overfitting.</li>
+</ul>
+</div>
+<div class="section" id="table-of-results">
+<h2>Table of results<a class="headerlink" href="#table-of-results" title="Permalink to this headline">¶</a></h2>
+<p>The results are summarised in the following table, which was generated automatically by the <a class="reference internal" href="exercise.html"><em>exercise module</em></a>:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">&nbsp;</th>
+<th class="head">M = 10</th>
+<th class="head">M = 50</th>
+<th class="head">M = 150</th>
+<th class="head">M = 10 (5000 iters)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Time elapsed</td>
+<td>0 days 00:02:11.794284</td>
+<td>0 days 00:04:46.988723</td>
+<td>0 days 00:11:01.507839</td>
+<td>0 days 00:09:19.538305</td>
+</tr>
+<tr class="row-odd"><td>Accuracy (training)</td>
+<td>0.94208</td>
+<td>0.95108</td>
+<td>0.96298</td>
+<td>0.94642</td>
+</tr>
+<tr class="row-even"><td>Accuracy (validation)</td>
+<td>0.9368</td>
+<td>0.946</td>
+<td>0.9563</td>
+<td>0.937</td>
+</tr>
+<tr class="row-odd"><td>Accuracy (test)</td>
+<td>0.9355</td>
+<td>0.9413</td>
+<td>0.956</td>
+<td>0.9387</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="mnist_tools.html" class="btn btn-neutral" title="mnist_tools module" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Douglas Machado Vieira.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+mnist_tools module
+==================
+
+.. automodule:: mnist_tools
+    :members:
+    :undoc-members:
+    :show-inheritance:

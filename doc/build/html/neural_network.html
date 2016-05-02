@@ -1,0 +1,374 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>neural_network module &mdash; single_hidden_layer_neural_network 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="single_hidden_layer_neural_network 1.0 documentation" href="index.html"/>
+        <link rel="up" title="Code" href="code.html"/>
+        <link rel="next" title="exercise module" href="exercise.html"/>
+        <link rel="prev" title="Code" href="code.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> single_hidden_layer_neural_network
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="theory.html">Theory</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="code.html">Code</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="code.html#modules">Modules</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="">neural_network module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exercise.html">exercise module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="activation_and_output_functions.html">activation_and_output_functions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gradient_descent.html">gradient_descent module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mnist_tools.html">mnist_tools module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#code-structure">Code structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="results.html">Results</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">single_hidden_layer_neural_network</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="code.html">Code</a> &raquo;</li>
+      
+    <li>neural_network module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/neural_network.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-neural_network">
+<span id="neural-network-module"></span><h1>neural_network module<a class="headerlink" href="#module-neural_network" title="Permalink to this headline">¶</a></h1>
+<p>Single hidden layer neural network implemented using back propagation.</p>
+<dl class="function">
+<dt id="neural_network.back_propagation_delta">
+<code class="descclassname">neural_network.</code><code class="descname">back_propagation_delta</code><span class="sig-paren">(</span><em>y</em>, <em>y_tilde</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/neural_network.html#back_propagation_delta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neural_network.back_propagation_delta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Back propagation matrix delta which, in this case, is the Jacobian
+of the cross-entropy loss function with respect to Z, the output of the
+hidden layer, where the output function is the softmax operator.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="neural_network.back_propagation_s">
+<code class="descclassname">neural_network.</code><code class="descname">back_propagation_s</code><span class="sig-paren">(</span><em>delta</em>, <em>w</em>, <em>beta</em>, <em>sigma_prime</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/neural_network.html#back_propagation_s"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neural_network.back_propagation_s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Back propagation matrix s which, in this case, is the Jacobian
+of the output of the hidden layer with respect to the input X.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="neural_network.calibrate_neural_network">
+<code class="descclassname">neural_network.</code><code class="descname">calibrate_neural_network</code><span class="sig-paren">(</span><em>K</em>, <em>M</em>, <em>p</em>, <em>sigma</em>, <em>sigma_prime</em>, <em>y</em>, <em>x</em>, <em>gradient_descent_method</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/neural_network.html#calibrate_neural_network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neural_network.calibrate_neural_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calibrates a neural network with one hidden layer for classification.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>K</strong> (<em>int</em>) &#8211; Number of classes for classification</li>
+<li><strong>M</strong> (<em>int</em>) &#8211; Number of neurons in the hidden layer</li>
+<li><strong>p</strong> (<em>int</em>) &#8211; Number of features in <cite>x</cite></li>
+<li><strong>(function</strong> (<em>sigma_prime</em>) &#8211; array-like to array-like): Activation function (e.g.
+sigmoid function).</li>
+<li><strong>(function</strong> &#8211; array-like to array-like): Derivative of sigma.</li>
+<li><strong>y</strong> (<em>1d NumPy array</em>) &#8211; Y observations in the training set</li>
+<li><strong>x</strong> (<em>2d NumPy array</em>) &#8211; X observations in the training set</li>
+<li><strong>gradient_descent_method</strong> (<em>string</em>) &#8211; Selects the gradient descent method.
+The available methods are: &#8220;Gradient Descent&#8221; and
+&#8220;Mini-batch Gradient Descent&#8221;.</li>
+<li><strong>**kwargs</strong> &#8211; arguments passed to the optimiser</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">returns the approximated value of x such that f(x) = 0
+given the algorithm interruption conditions.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array-like</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="neural_network.cross_entropy">
+<code class="descclassname">neural_network.</code><code class="descname">cross_entropy</code><span class="sig-paren">(</span><em>y</em>, <em>y_tilde</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/neural_network.html#cross_entropy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neural_network.cross_entropy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the cross-entropy loss function for a given model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>y</strong> (<em>1d or 2d Numpy array</em>) &#8211; Observed outcomes.</li>
+<li><strong>y_tilde</strong> (<em>1d or 2d Numpy array</em>) &#8211; Computed outcomes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Returns the cross-entropy loss.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float or 1d Numpy array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="neural_network.neural_network">
+<code class="descclassname">neural_network.</code><code class="descname">neural_network</code><span class="sig-paren">(</span><em>x</em>, <em>g</em>, <em>sigma</em>, <em>alpha_0</em>, <em>alpha</em>, <em>beta_0</em>, <em>beta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/neural_network.html#neural_network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neural_network.neural_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates the neural network with one hidden layer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>1d or 2d Numpy array</em>) &#8211; Input vector x.</li>
+<li><strong>(function</strong> (<em>sigma</em>) &#8211; array-like to array-like): Output function (e.g. softmax
+function).</li>
+<li><strong>(function</strong> &#8211; array-like to array-like): Activation function (e.g.
+sigmoid function).</li>
+<li><strong>alpha_0</strong> (<em>NumPy array</em>) &#8211; Bias parameter vector from the input layer to
+the hidden layer.</li>
+<li><strong>alpha</strong> (<em>NumPy 2d array</em>) &#8211; Weights parameter matrix from the input layer
+to the hidden layer.</li>
+<li><strong>beta_0</strong> (<em>NumPy array</em>) &#8211; Bias parameter vector from the hidden layer to
+the output layer.</li>
+<li><strong>beta</strong> (<em>NumPy 2d array</em>) &#8211; Weights parameter matrix from the hidden layer
+to the output layer.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Returns the neural network output vector.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">1d or 2d Numpy array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="neural_network.neural_network_gradient">
+<code class="descclassname">neural_network.</code><code class="descname">neural_network_gradient</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>sigma</em>, <em>sigma_prime</em>, <em>alpha_0</em>, <em>alpha</em>, <em>beta_0</em>, <em>beta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/neural_network.html#neural_network_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neural_network.neural_network_gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates the gradient of the loss function of the single-layer neural
+network when the loss function is the cross-entropy and the output function
+is the softmax operator.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>1d Numpy array</em>) &#8211; Observed input matrix x.</li>
+<li><strong>x</strong> &#8211; Observed outcome vector y.</li>
+<li><strong>(function</strong> (<em>sigma_prime</em>) &#8211; array-like to array-like): Activation function (e.g.
+sigmoid function).</li>
+<li><strong>(function</strong> &#8211; array-like to array-like): Derivative of sigma.</li>
+<li><strong>alpha_0</strong> (<em>NumPy array</em>) &#8211; Bias parameter vector from the input layer to
+the hidden layer.</li>
+<li><strong>alpha</strong> (<em>NumPy 2d array</em>) &#8211; Weights parameter matrix from the input layer
+to the hidden layer.</li>
+<li><strong>beta_0</strong> (<em>NumPy array</em>) &#8211; Bias parameter vector from the hidden layer to
+the output layer.</li>
+<li><strong>beta</strong> (<em>NumPy 2d array</em>) &#8211; Weights parameter matrix from the hidden layer
+to the output layer.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Returns the Jacobian of the neural network output
+vector.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">2d Numpy array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="neural_network.theta_map">
+<code class="descclassname">neural_network.</code><code class="descname">theta_map</code><span class="sig-paren">(</span><em>theta</em>, <em>p</em>, <em>M</em>, <em>K</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/neural_network.html#theta_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neural_network.theta_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Auxiliary function used in the <a href="#id1"><span class="problematic" id="id2">`</span></a>calibrate_neural_network function. It
+splits the 1d parameter array into the bias vectors and weight matrices.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="exercise.html" class="btn btn-neutral float-right" title="exercise module" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="code.html" class="btn btn-neutral" title="Code" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Douglas Machado Vieira.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

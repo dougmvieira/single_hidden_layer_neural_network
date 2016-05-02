@@ -1,0 +1,7 @@
+exercise module
+===============
+
+.. automodule:: exercise
+    :members:
+    :undoc-members:
+    :show-inheritance:

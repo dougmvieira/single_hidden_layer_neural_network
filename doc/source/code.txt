@@ -1,0 +1,30 @@
+Code
+====
+
+
+Modules
+-------
+
+.. toctree::
+   :maxdepth: 4
+
+   neural_network
+   exercise
+   activation_and_output_functions
+   gradient_descent
+   mnist_tools
+
+
+Code structure
+--------------
+
+The code is organised as follows:
+
+- The core implementation of the neural network is found in :doc:`neural_network`;
+
+- The :doc:`exercise` is a demonstration of the :doc:`neural_network` module using the MNIST data set;
+
+- The :doc:`activation_and_output_functions` and :doc:`gradient_descent` provide elemental functions that support the :doc:`neural_network`. However, if any function in these two modules are needed, it suffices to import :doc:`neural_network`, because it already imports all functions from these modules;
+
+- The :doc:`mnist_tools` provide functions specific to the MNIST data set. It is essential to the :doc:`exercise`, but it also provides a function that displays a single character encoded in the MNIST data set.
+
