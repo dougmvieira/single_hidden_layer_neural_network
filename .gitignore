@@ -1,0 +1,5 @@
+mnist.pkl.gz
+*.pickle
+*.pyc
+*.doctree
+*~
